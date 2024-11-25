@@ -50,7 +50,7 @@ void RPM_CAL_MAX(unsigned int f_RPM){
 }
 
 void RPM_CAL_AVERAGE(unsigned int f_RPM){
-    if(f_RPM != 0){
+    if(f_RPM != 0 && f_RPM > 1000 && f_RPM < 3000){
         RPM_count += f_RPM;
         RPM_ROUND += 1;
         RPM_average = RPM_count/RPM_ROUND;
