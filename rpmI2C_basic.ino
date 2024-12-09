@@ -9,10 +9,11 @@ const byte magnet_num = 3;
 unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
 const int debounceDelay = 200;   // the debounce time; increase if the output flickers
 const unsigned long one_sec = 1000000;
-unsigned int RPM_MAX;
-unsigned int RPM_average;
-unsigned long RPM_ROUND;
-unsigned long long RPM_count;
+
+unsigned int RPM_MAX; // Maximum recorded RPM value
+unsigned int RPM_average; // Average RPM value
+unsigned long RPM_ROUND; // Total number of RPM measurements
+unsigned long long RPM_count; // Accumulated RPM values for averaging
 
 void counter() {
   if ((micros() - lastDebounceTime) > debounceDelay)
@@ -21,6 +22,8 @@ void counter() {
   lastDebounceTime = micros();
   }
 }
+
+
 void setup() {
   lcd.begin(16, 2);
   lcd.init();       // initialize the lcd
@@ -44,19 +47,22 @@ void setup() {
 }
 
 void RPM_CAL_MAX(unsigned int f_RPM){
+    // if now round's RPM bigger than previous maxium RPM. Updating max RPM.
     if(f_RPM > RPM_MAX){
         RPM_MAX = f_RPM;
     }
 }
 
-void RPM_CAL_AVERAGE(unsigned int f_RPM){
+void RPM_CAL_AVERAGE(unsigned int f_RPM
+    // filter some RPM, because it is abnormal
     if(f_RPM != 0 && f_RPM > 1000 && f_RPM < 40000){
         RPM_count += f_RPM;
         RPM_ROUND += 1;
-        RPM_average = RPM_count/RPM_ROUND;
+        RPM_average = RPM_count/RPM_ROUND; //caculate RPM's average.
     }
 }
 
+// lcd display three measurements result.
 void display_lcd_num(unsigned int f_RPM){
     lcd.setCursor(3, 0);
     lcd.print(f_RPM);
