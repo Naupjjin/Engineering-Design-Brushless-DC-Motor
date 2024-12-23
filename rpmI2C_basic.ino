@@ -53,7 +53,7 @@ void RPM_CAL_MAX(unsigned int f_RPM){
     }
 }
 
-void RPM_CAL_AVERAGE(unsigned int f_RPM
+void RPM_CAL_AVERAGE(unsigned int f_RPM){
     // filter some RPM, because it is abnormal
     if(f_RPM != 0 && f_RPM > 1000 && f_RPM < 40000){
         RPM_count += f_RPM;
