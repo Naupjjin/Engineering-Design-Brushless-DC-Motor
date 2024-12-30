@@ -2,7 +2,7 @@
 LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 volatile unsigned int count = 0;
-const byte counterPin = 2;
+const byte counterPin = 3;
 unsigned long count_start;
 unsigned int rpm;
 const byte magnet_num = 3;
@@ -74,7 +74,7 @@ void display_lcd_num(unsigned int f_RPM){
 
 void loop() {
     if (micros() -  count_start  >= one_sec) {  /* 每秒更新 */
-    detachInterrupt(0); // 計算 rpm 時，停止計時  //  cmd();
+    detachInterrupt(1); // 計算 rpm 時，停止計時  //  cmd();
     // 偵測的格數count * (60 * 1000 / 一圈網格數3）/ 時間差)
     rpm = (60.0 * (float)one_sec / (float)magnet_num ) / ((float)micros() - (float) count_start ) * (float)count;
     count = 0;
@@ -83,7 +83,7 @@ void loop() {
     RPM_CAL_AVERAGE(rpm);
     RPM_CAL_MAX(rpm);
 
-    attachInterrupt(0, counter, FALLING);
+    attachInterrupt(1, counter, FALLING);
     display_lcd_num(rpm);
 
   }
